@@ -83,6 +83,15 @@ const AddCards = () => {
         toast({
           title: "Successfully Card Details added.",
         })
+        setFormData({user_id: "",
+          cardNumber: "",
+          cardholderName: "",
+          expiryDate: "",
+          cvv: "",
+          cardType: "credit",
+          network: "",
+          bank: "",
+          pin: ""})
       } else {
         toast({
           title: "Card is not Added",
