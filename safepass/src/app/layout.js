@@ -3,6 +3,9 @@ import "./globals.css";
 import { ClerkProvider, SignInButton, SignedIn, SignedOut, UserButton } from '@clerk/nextjs'
 import Navbar from "@/components/navbar";
 import { ThemeProvider } from "@/components/theme-provider";
+import Footer from "@/components/footer";
+import { UserProvider } from "@/context/userContext";
+import { Toaster } from "@/components/ui/toaster";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -21,14 +24,8 @@ export const metadata = {
 
 export default function RootLayout({ children }={children:React.ReactNode}) {
   return (
-    // <html lang="en">
-    //   <body
-    //     className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-    //   >
-    //     {children}
-    //   </body>
-    // </html>
     <ClerkProvider>
+      <UserProvider>
       <html lang="en">
         <body>
         <ThemeProvider
@@ -37,9 +34,13 @@ export default function RootLayout({ children }={children:React.ReactNode}) {
           
           <Navbar />
           {children}
+          <Toaster />
+          <Footer />
           </ThemeProvider>
         </body>
       </html>
+      </UserProvider>
     </ClerkProvider>
+    
   );
 }
