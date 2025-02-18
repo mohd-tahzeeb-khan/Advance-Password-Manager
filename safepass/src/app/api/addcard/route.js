@@ -9,12 +9,12 @@ export async function GET(req) {
     try {
       const { searchParams } = new URL(req.url);
       const userid = searchParams.get("userid");
-  
+      console.log("sdgfd",userid)
       if (!userid) {
-        return NextResponse.json({ message: "Email is required" }, { status: 400 });
+        return NextResponse.json({ message: "i dont know Email is required" }, { status: 400 });
       }
       const connection = await getDBConnection();
-      const [cards] = await connection.execute("SELECT * FROM userCards WHERE user_id = ?", [userid]);
+      const [cards] = await connection.execute("SELECT * FROM usercards WHERE user_id = ?", [userid]);
       await connection.end();
   
       if (cards.length === 0) {
@@ -50,7 +50,7 @@ export async function POST(req) {
         cvv=BEencrypt(cvv);
         expiryDate=BEencrypt(expiryDate);
         const connection =await getDBConnection();
-        await connection.execute("INSERT INTO userCards (user_id, pin,cvv,expiry_date,card_no,cardholder_name,type,card_network,bank_name) VALUES (?,?,?,?,?,?,?,?,?)",
+        await connection.execute("INSERT INTO usercards (user_id, pin,cvv,expiry_date,card_no,cardholder_name,type,card_network,bank_name) VALUES (?,?,?,?,?,?,?,?,?)",
            
            
            
