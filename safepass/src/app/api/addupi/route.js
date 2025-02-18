@@ -12,9 +12,6 @@ export async function GET(req) {
       if (!userid) {
         return NextResponse.json({ message: "Email is required" }, { status: 400 });
       }
-  
-    //   const decodedEmail = decodeURIComponent(email); // ✅ Fix: Decode email before querying
-    //   console.log("🔍 Searching for user with email:", decodedEmail); // Debugging log
       const connection = await getDBConnection();
       const [upis] = await connection.execute("SELECT * FROM userUpi WHERE user_id = ?", [userid]);
       await connection.end();
@@ -24,8 +21,9 @@ export async function GET(req) {
       }
       const decryptedUpis = upis.map(upi => ({
         ...upi,
-        pin:BEdecrypt(upi.pin),upino:BEdecrypt(upi.UPI_no) // Decrypt pin before sending responsedecrypt(user.pin)
+        pin:BEdecrypt(upi.pin),UPI_no:BEdecrypt(upi.UPI_no) // Decrypt pin before sending responsedecrypt(user.pin)
       }));
+      console.log("111d",decryptedUpis)
       return NextResponse.json(decryptedUpis); // Return user details
     } catch (error) {
       console.error("❌ Fetch User Error:", error);
