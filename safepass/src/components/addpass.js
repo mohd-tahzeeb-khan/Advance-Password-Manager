@@ -7,6 +7,7 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/componen
 import { useUser } from "@clerk/nextjs"
 import { useToast } from "@/hooks/use-toast"
 import { useUserContext } from "@/context/userContext"
+import { encrypt } from "@/utils/encryption"
 export default function AddPassword() {
   const {toast} =useToast();
   const {user, loaduser}=useUser();
@@ -27,7 +28,7 @@ export default function AddPassword() {
       fetch(`/api/user?email=${useremail}`)
       .then((response) => response.json())
       .then((data) => {
-        console.log("Fetched Users:", data);
+        // console.log("Fetched Users:", data);
         if(data && typeof data==="object"){
           setuserdetails(data);
         }
@@ -57,13 +58,15 @@ export default function AddPassword() {
 
     e.preventDefault()
     if(formData.password===formData.confirmPassword){
+      const encryptedPassword = encrypt(formData.password);
+    const updatedFormData = { ...formData, password: encryptedPassword};
       try {
         const response = await fetch("/api/addpass", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify(formData),
+          body: JSON.stringify(updatedFormData),
         });
   
         const data = await response.json();
