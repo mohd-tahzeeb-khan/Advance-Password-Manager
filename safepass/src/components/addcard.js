@@ -9,7 +9,8 @@ import { Button } from './ui/button';
 import { useUserContext } from '@/context/userContext';
 import { useUser } from '@clerk/nextjs';
 import { useToast } from '@/hooks/use-toast';
-
+import { encrypt } from '@/utils/encryption';
+// import { Toaster, toast } from 'sonner'
 // ---------------------------------------------------------------------------------------------
 const AddCards = () => {
   const {toast} =useToast();
@@ -34,7 +35,7 @@ const AddCards = () => {
       fetch(`/api/user?email=${useremail}`)
       .then((response) => response.json())
       .then((data) => {
-        console.log("Fetched Users:", data);
+        // console.log("Fetched Users:", data);
         if(data && typeof data==="object"){
           setuserdetails(data);
         }
@@ -66,16 +67,17 @@ const AddCards = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
-    console.log("Form Data:", formData);
-
+    const encryptedPin = encrypt(formData.pin);
+    const encryptedCVV = encrypt(formData.cvv);
+    const encryptedExpiryDate = encrypt(formData.expiryDate);
+    const updatedFormData = { ...formData, pin: encryptedPin, cvv:encryptedCVV, expiryDate:encryptedExpiryDate };
     try {
       const response = await fetch("/api/addcard", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(updatedFormData),
       });
 
       const data = await response.json();
@@ -126,7 +128,7 @@ const AddCards = () => {
             <Label htmlFor="cardholderName">Cardholder Name</Label>
             <Input
               id="cardholderName"
-              placeholder="John Doe"
+              placeholder="e.g John Doe"
               className="uppercase"
               value={formData.cardholderName}
               onChange={handleChange}
