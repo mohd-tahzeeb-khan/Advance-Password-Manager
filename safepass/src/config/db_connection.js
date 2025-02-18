@@ -7,7 +7,8 @@ const configcredential = {
     password:process.env.DB_PASSWORD,      // MySQL password
     database: process.env.DB_NAME, // Database name
     port: process.env.DB_PORT,              // Default MySQL port
-    multipleStatements: process.env.DB_MULTI_STATEMENT
+    multipleStatements: process.env.DB_MULTI_STATEMENT,
+    connectTimeout: 20000
 };
 
 // Function to get a new MySQL connection
