@@ -8,6 +8,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Button } from '@/components/ui/button';
 import { useUserContext } from '@/context/userContext';
 import { toast, useToast } from '@/hooks/use-toast';
+import { encrypt } from '@/utils/encryption';
+
 const upidetail = () => {
   const {toast} =useToast();
   const {userdata}=useUserContext();
@@ -27,14 +29,16 @@ const upidetail = () => {
       user_id: userdata?.user_id || "" // Ensure userdata is not undefined
     }))
     e.preventDefault();
-    console.log(upidata)
+    const encryptedUpino = encrypt(upidata.upino);
+    const encryptedPin = encrypt(upidata.pin);
+    const updatedFormData = { ...upidata, upino: encryptedUpino, pin:encryptedPin };
     try {
       const response = await fetch("/api/addupi", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(upidata),
+        body: JSON.stringify(updatedFormData),
       });
       const data = await response.json();
       if (response.ok) {
@@ -149,6 +153,8 @@ const upidetail = () => {
             <Input
               id="pin"
               placeholder="Enter your Pin"
+              type="password"
+              maxLength={8}
               value={upidata.pin}
               onChange={handleChange}
               className="w-1/2"
