@@ -19,6 +19,25 @@ export const UserProvider = ({ children }) => {
     }
   }, [user]);
 
+  useEffect(() => {
+    if(user && user.primaryEmailAddress){
+      const useremail=encodeURIComponent(user.primaryEmailAddress?.emailAddress)
+      fetch(`/api/user?email=${useremail}`)
+      .then((response) => response.json())
+      .then((data) => {
+        // console.log("Fetched Users:", data);
+        if(data && typeof data==="object"){
+          setUserdata({ 
+            ...userdata, 
+           user_id:data.id
+          });
+        }
+        // setFormData((prev) => ({ ...prev, user_id: data.user_id }));
+      })
+      .catch((error) => console.error("Error fetching users:", error));
+    }
+  }, [user])
+  
   return (
     <UserContext.Provider value={{ userdata, setUserdata }}>
       {children}
