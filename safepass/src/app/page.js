@@ -39,8 +39,8 @@ const Page = () => {
         <Button className="bg-blue-500 hover:bg-blue-600 px-8 py-4" onClick={dashboadclick}> 
           Try it
         </Button>
-        <Button variant="outline" className="px-8 py-4 text-black">
-          Learn More
+        <Button variant="outline" className="px-8 py-4 text-white">
+          How it Works
         </Button>
       </motion.div>
     </div>
