@@ -127,7 +127,7 @@ const DataDisplay = () => {
       </div>
     </>
   );
-  if (error) return <p>Error: {error}</p>;
+  if (error) return <p>NO Data Found</p>;
 
   // Lock component for secured columns
   const ColumnLock = ({ column }) => (
