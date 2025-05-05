@@ -12,8 +12,8 @@ export default function Footer() {
         <div className="flex flex-col md:flex-row items-center justify-between gap-6">
           {/* Logo and Text */}
           <div className="text-center md:text-left">
-            <h2 className="text-lg font-bold">YourBrand</h2>
-            <p className="text-sm text-muted-foreground">Creating amazing experiences since 2024.</p>
+            <h2 className="text-lg font-bold">SafePass</h2>
+            <p className="text-sm text-muted-foreground">Store, Use, Safe Precious Passwords</p>
           </div>
 
           {/* Social Media Icons */}
@@ -27,7 +27,7 @@ export default function Footer() {
 
         {/* Copyright Section */}
         <div className="mt-6 text-center text-sm text-muted-foreground">
-          <p>&copy; {new Date().getFullYear()} YourBrand. All rights reserved.</p>
+          <p>&copy; {new Date().getFullYear()} SafePass. All rights reserved.</p>
         </div>
       </div>
     </footer>
