@@ -60,7 +60,6 @@ const Dashboard = () => {
         <UpiDetail />
         <AddPassword />
       </div>
-      
         <Datadisplay />
       
     </div>
