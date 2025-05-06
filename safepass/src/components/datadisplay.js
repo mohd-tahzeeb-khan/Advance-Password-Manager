@@ -12,6 +12,7 @@ import { useUser } from '@clerk/nextjs';
 const DataDisplay = () => {
   // State to store fetched data
   const [data, setData] = useState({ cards: [], upi: [], credentials: [] });
+  const [id, setid] = useState(0)
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const {user, loaduser}=useUser();
@@ -22,27 +23,25 @@ const DataDisplay = () => {
       fetch(`/api/user?email=${useremail}`)
       .then((response) => response.json())
       .then((data) => {
-        // console.log("Fetched Users:", data);
-        const id=data.id;
-        if(data && typeof data==="object"){
-          // setuserdetails(data);
-          // console.log("datadisplay",user);
-         
-        }
-        // setFormData((prev) => ({ ...prev, user_id: data.user_id }));
+        console.log("Fetched Users:", data);
+        const {id, clerk_id}=data;
+        setid(id)
+        console.log("id is: ",id);
+        console.log("clerkid is : ",clerk_id);
       })
       .catch((error) => console.error("Error fetching users:", error));
     }
-  }, [user]);
+  }, [data]);
 
   // Fetch data from APIs
   useEffect(() => {
     const fetchData = async () => {
+      console.log("id is for the fetching: " ,id)
       try {
         const [cardRes, passwordRes, upiRes] = await Promise.all([
-          fetch(`/api/addcard?userid=1`),
-          fetch('/api/addpass?userid=1'),
-          fetch('/api/addupi?userid=1')
+          fetch(`/api/addcard?userid=${id}`),
+          fetch(`/api/addpass?userid=${id}`),
+          fetch(`/api/addupi?userid=${id}`)
         ]);
 
         if (!cardRes.ok || !passwordRes.ok || !upiRes.ok) {
@@ -54,12 +53,11 @@ const DataDisplay = () => {
           passwordRes.json(),
           upiRes.json()
         ]);
-        // const encryptedPassword = encrypt(formData.pin);
-        // const updatedFormData = { ...formData, pin: encryptedPassword };
         const decryptedCards = cardData.map(card => ({
           ...card,
           pin:decrypt(card.pin), expiry_date:decrypt(card.expiry_date), cvv:decrypt(card.cvv) // Decrypt pin before sending responsedecrypt(user.pin)
         }));
+        console.log("decryptedcards", decryptedCards);
         const decryptedPassword = passwordData.map(password => ({
           ...password,
           password_hashed:decrypt(password.password_hashed) // Decrypt pin before sending responsedecrypt(user.pin)
@@ -69,7 +67,9 @@ const DataDisplay = () => {
           UPI_no:decrypt(upi.UPI_no), pin:decrypt(upi.pin) // Decrypt pin before sending responsedecrypt(user.pin)
         }));
         setData({ cards: decryptedCards, upi: decryptedUpi, credentials: decryptedPassword });
+        console.log(data.decryptedCards);
       } catch (error) {
+        console.log("error message from 72: ", error.message);
         setError(error.message);
       } finally {
         setLoading(false);
@@ -77,7 +77,7 @@ const DataDisplay = () => {
     };
 
     fetchData();
-  }, []);
+  }, [id]);
 
 
   // Logic for Copy data
@@ -127,7 +127,11 @@ const DataDisplay = () => {
       </div>
     </>
   );
-  if (error) return <p>NO Data Found</p>;
+  // if (error) return (
+  // <div className='flex justify-center items-center border border-white mt-10'>
+    {/* <h1>Please Enter all Your Precious Data</h1> */}
+
+  {/* </div>); */}
 
   // Lock component for secured columns
   const ColumnLock = ({ column }) => (
