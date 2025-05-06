@@ -36,6 +36,7 @@ export async function GET(req) {
 // -------------------------------------------------------------------------------------------------------------
 export async function POST(req) {
     try {
+      console.log(req)
         let { user_id, upino, account_holder_name, account_type, pin, bank_name, upi_app } = await req.json();
         
         if (!user_id || !upino || !account_holder_name || !account_type || !pin || !bank_name || !upi_app) {
