@@ -9,7 +9,6 @@ export async function GET(req) {
     try {
       const { searchParams } = new URL(req.url);
       const userid = searchParams.get("userid");
-      console.log("sdgfd",userid)
       if (!userid) {
         return NextResponse.json({ message: "i dont know Email is required" }, { status: 400 });
       }
@@ -23,7 +22,7 @@ export async function GET(req) {
       const decryptedCards = cards.map(card => ({
         ...card,
         pin:BEdecrypt(card.pin),cvv:BEdecrypt(card.cvv), expiry_date:BEdecrypt(card.expiry_date) // Decrypt pin before sending responsedecrypt(user.pin)
-      }));
+      }));console.log("data printed",decryptedCards)
       return NextResponse.json(decryptedCards); // Return user details
     } catch (error) {
       console.error("❌ Fetch User Error:", error);
