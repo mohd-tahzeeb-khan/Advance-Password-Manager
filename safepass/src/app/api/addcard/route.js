@@ -1,8 +1,6 @@
 import { NextResponse } from "next/server";
 import { getDBConnection } from "@/config/db_connection";
 import { BEdecrypt, BEencrypt} from "@/utils/encryption";
-import { Bed } from "lucide-react";
-// import { useEffect } from "react";
 
 
 export async function GET(req) {
@@ -14,7 +12,7 @@ export async function GET(req) {
       }
       const connection = await getDBConnection();
       const [cards] = await connection.execute("SELECT * FROM usercards WHERE user_id = ?", [userid]);
-      await connection.end();
+      // await connection.end();
   
       if (cards.length === 0) {
         return NextResponse.json({ message: "Cards not found" }, { status: 404 });
@@ -22,10 +20,9 @@ export async function GET(req) {
       const decryptedCards = cards.map(card => ({
         ...card,
         pin:BEdecrypt(card.pin),cvv:BEdecrypt(card.cvv), expiry_date:BEdecrypt(card.expiry_date) // Decrypt pin before sending responsedecrypt(user.pin)
-      }));console.log("data printed",decryptedCards)
+      }));
       return NextResponse.json(decryptedCards); // Return user details
     } catch (error) {
-      console.error("❌ Fetch User Error:", error);
       return NextResponse.json({ message: "Internal Server Error", error: error.message }, { status: 500 });
     }
   }
@@ -54,11 +51,34 @@ export async function POST(req) {
            
            
             [user_id, pin, cvv,expiryDate, cardNumber, cardholderName,cardType, network, bank ]);
-            await connection.end();
+            // 
+            // await connection.end();
             return NextResponse.json({message:"Card added to the user's Account"}, {status:201});
     } catch (error) {
-        console.log("POST Request for Card adding is failed", error)
         return NextResponse.json({message:"Internal Server Error", error:error.message}, {status:500});
     }
     
+}
+
+// --------------------------------------------------------------------------------------------------------
+
+export async function DELETE(req) {
+  try {
+    const { searchParams } = new URL(req.url);
+    const card_id = searchParams.get("id");
+    if (!card_id) {
+      return NextResponse.json({ message: "i dont know Email is required" }, { status: 400 });
+    }
+    const connection = await getDBConnection();
+    const [returnedresponse] = await connection.execute("DELETE FROM usercards WHERE card_id=?", [card_id]);
+    if(returnedresponse.affectedRows>0){
+      return NextResponse.json(returnedresponse.affectedRows, {status:200});
+    }
+    else{
+      return NextResponse.json({message:"Card Not found"}, {status:404});
+    }
+    
+  } catch (error) {
+    return NextResponse.json({ message: "Internal Server Error", error: error.message }, { status: 500 });
+  }
 }
