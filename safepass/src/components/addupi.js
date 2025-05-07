@@ -31,6 +31,9 @@ const upidetail = () => {
     e.preventDefault();
     const encryptedUpino = encrypt(upidata.upino);
     const encryptedPin = encrypt(upidata.pin);
+    console.log("encrypted : data: ",encryptedUpino);
+    console.log("encrypted : data: ",encryptedPin);
+
     const updatedFormData = { ...upidata, upino: encryptedUpino, pin:encryptedPin };
     try {
       const response = await fetch("/api/addupi", {
