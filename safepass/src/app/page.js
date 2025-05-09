@@ -3,8 +3,10 @@ import React from 'react'
 import { motion } from "framer-motion";
 import { Button } from '@/components/ui/button';
 import { useRouter } from 'next/navigation';
+import { useUser } from '@clerk/nextjs';
 
 const Page = () => {
+  const { isSignedIn, user, isLoaded } = useUser();
   const route=useRouter();
 
   const dashboadclick=()=>{
@@ -36,9 +38,11 @@ const Page = () => {
         transition={{ duration: 1, delay: 1 }}
         className="flex justify-center space-x-4"
       >
-        <Button className="bg-blue-500 hover:bg-blue-600 px-8 py-4" onClick={dashboadclick}> 
-          Try it
-        </Button>
+        {user? <Button className="bg-blue-500 hover:bg-blue-600 px-8 py-4 text-white font-bold" onClick={dashboadclick}> 
+  Dashboard
+</Button>:<Button className="bg-blue-500 hover:bg-blue-600 px-8 py-4" onClick={dashboadclick}> 
+  Try it
+</Button>}
         <Button variant="outline" className="px-8 py-4 text-white">
           How it Works
         </Button>
