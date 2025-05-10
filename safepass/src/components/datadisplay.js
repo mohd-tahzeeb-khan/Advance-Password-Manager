@@ -116,6 +116,11 @@ const DataDisplay = () => {
       alert("Incorrect password!");
     }
   };
+  const deletedetails=(id)=>{
+    if(id>=0){
+
+    }
+  }
 
   // Loading and Error handling
   if (loading) return(
@@ -127,12 +132,6 @@ const DataDisplay = () => {
       </div>
     </>
   );
-  // if (error) return (
-  // <div className='flex justify-center items-center border border-white mt-10'>
-    {/* <h1>Please Enter all Your Precious Data</h1> */}
-
-  {/* </div>); */}
-
   // Lock component for secured columns
   const ColumnLock = ({ column }) => (
     <div className="absolute inset-0 bg-white/30 backdrop-blur-md flex flex-col items-center justify-around gap-4 p-4">
@@ -162,7 +161,8 @@ const DataDisplay = () => {
             {data.cards.map((card, index) => (
               
               <Card key={index} className="p-4">
-                <span className='text-white font-bold text-3xl'>{index+1}.</span>
+                <span className='text-white font-bold text-3xl flex justify-between'><div>{index+1} {card.card_id}</div>
+                <div className='text-white font-semibold text-[12px] px-4 py-1 bg-red-600 hover:scale-95 border-2 rounded-lg' onClick={()=> deletedetails(index)}>Delete</div></span>
               <Table>
                 <TableHeader>
                   <TableColumn className="w-1/3 min-w-[150px]"></TableColumn>
@@ -191,15 +191,15 @@ const DataDisplay = () => {
                 </TableRow>
                 <TableRow key={card.expiry_date}>
                   <TableCell className="w-1/3 min-w-[150px]">Card Expiry Date</TableCell>
-                  <TableCell className="w-[20px] border-2 border-green-400 text-center">{card.expiry_date}</TableCell>
+                  <TableCell className="min-w-3 max-w-4 border-2 border-green-400 text-center">{card.expiry_date}</TableCell>
                 </TableRow>
                 <TableRow key={card.cvv}>
                   <TableCell className="w-1/3 min-w-[150px]">Card CVV</TableCell>
-                  <TableCell className="w-[20px] border-2 border-green-400 text-center">{card.cvv}</TableCell>
+                  <TableCell className="min-w-3 max-w-4 border-2 border-green-400 text-center">{card.cvv}</TableCell>
                 </TableRow>
                 <TableRow key={card.pin}>
-                  <TableCell className="w-1/3 min-w-[150px]">Card PIN</TableCell>
-                  <TableCell className="w-[20px] border-2 border-green-400 text-center">{card.pin}</TableCell>
+                  <TableCell className="min-w-3 max-w-4">Card PIN</TableCell>
+                  <TableCell className="min-w-3 max-w-4 border-2 border-green-400 text-center">{card.pin}</TableCell>
                 </TableRow>
               </TableBody>
            </Table>
